@@ -83,7 +83,7 @@ namespace ConsoleApplication1
         public void update(T Model, params string[] strs)
         {
             DbEntityEntry entry = db.Entry<T>(Model);
-            entry.State = System.Data.EntityState.Unchanged;
+            entry.State = System.Data.EntityState.Modified;
             foreach (string tempStr in strs)
             {
                 entry.Property(tempStr).IsModified = true;
