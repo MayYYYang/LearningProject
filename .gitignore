@@ -11,7 +11,12 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
-*/obj/
-*/bin/
+*/web/obj/
+*/web/bin/
+
+Debug/  
+Release/  
+obj/  
+
 
 source/UI/Innocellence\.Web/App_Data/Logs/
