@@ -61,6 +61,7 @@ namespace ConsoleApplication1
         //因为我们要操作数据库，所以先实例化一个上下文
         Model1Container db = new Model1Container();
 
+        public IQueryable<T> Entities { get { return db.Set<T>(); } }
         #region 添加方法
         /// <summary>
         /// 添加方法
@@ -248,5 +249,26 @@ namespace ConsoleApplication1
         /// </summary>
         /// <param name="configurations">实体映射配置注册器</param>
         void RegistTo(ConfigurationRegistrar configurations);
+    }
+
+    public class DBMain
+    {
+        public void Main()
+        {
+            GameGroupingService<GameGrouping> test = new GameGroupingService<GameGrouping>();
+            test.add(new GameGrouping { Id = 7898, GroupName = "dddddddddas", ProjectHcpId = "ddddddddd" });
+            DALBase<GameGrouping1> test1 = new DALBase<GameGrouping1>();
+            var list = test1.getList(a => true).ToList();
+
+            list[0].VersionNumber = 898;
+            test1.update(list[0], "VersionNumber");
+            test1.remove(list[0]);
+
+            // 不to List 时无法进行jion , 
+            var set = from n in test.Entities.ToList()
+                      join m in test1.Entities.ToList() on n.Id equals m.Id
+                      select m;
+            var dd = set.ToList();
+        }
     }
 }
