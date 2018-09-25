@@ -1,2 +1,0 @@
-D:\LearningCode\test\web\ts\Variable.js
-D:\LearningCode\test\web\ts\Variable.js.map
