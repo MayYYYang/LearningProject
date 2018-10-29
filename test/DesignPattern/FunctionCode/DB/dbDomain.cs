@@ -59,9 +59,17 @@ namespace ConsoleApplication1
    public  class DALBase<T> where T : class
     {
         //因为我们要操作数据库，所以先实例化一个上下文
-        Model1Container db = new Model1Container();
+        private static Model1Container db = null;
+        public DALBase()
+        {
+            if(db==null)
+            {
+                db = new Model1Container();
+            }
+        }
 
         public IQueryable<T> Entities { get { return db.Set<T>(); } }
+
         #region 添加方法
         /// <summary>
         /// 添加方法
@@ -265,8 +273,8 @@ namespace ConsoleApplication1
             test1.remove(list[0]);
 
             // 不to List 时无法进行jion , 
-            var set = from n in test.Entities.ToList()
-                      join m in test1.Entities.ToList() on n.Id equals m.Id
+            var set = from n in test.Entities
+                      join m in test1.Entities on n.Id equals m.Id
                       select m;
             var dd = set.ToList();
         }
