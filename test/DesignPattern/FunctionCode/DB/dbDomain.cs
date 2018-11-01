@@ -52,6 +52,10 @@ namespace ConsoleApplication1
 
     }
 
+    public static class DBContainer
+    {
+        public static Model1Container  container = new Model1Container();
+    }
     /// <summary>
     /// 定义泛型,必须规定T为类，不然db.Set<T>会报错
     /// </summary>
@@ -59,13 +63,9 @@ namespace ConsoleApplication1
    public  class DALBase<T> where T : class
     {
         //因为我们要操作数据库，所以先实例化一个上下文
-        private static Model1Container db = null;
+        public static Model1Container db = DBContainer.container;
         public DALBase()
-        {
-            if(db==null)
-            {
-                db = new Model1Container();
-            }
+        {    
         }
 
         public IQueryable<T> Entities { get { return db.Set<T>(); } }
@@ -192,7 +192,7 @@ namespace ConsoleApplication1
         #endregion
     }
 
-    public partial class Model1Container : DbContext
+    public  class Model1Container : DbContext
 
     {
 
@@ -264,18 +264,18 @@ namespace ConsoleApplication1
         public void Main()
         {
             GameGroupingService<GameGrouping> test = new GameGroupingService<GameGrouping>();
-            test.add(new GameGrouping { Id = 7898, GroupName = "dddddddddas", ProjectHcpId = "ddddddddd" });
+            //test.add(new GameGrouping { Id = 7898, GroupName = "dddddddddas", ProjectHcpId = "ddddddddd" });
             DALBase<GameGrouping1> test1 = new DALBase<GameGrouping1>();
-            var list = test1.getList(a => true).ToList();
+            //var list = test1.getList(a => true).ToList();
 
-            list[0].VersionNumber = 898;
-            test1.update(list[0], "VersionNumber");
-            test1.remove(list[0]);
+            //list[0].VersionNumber = 898;
+            //test1.update(list[0], "VersionNumber");
+            //test1.remove(list[0]);
 
-            // 不to List 时无法进行jion , 
+            // 多表可以联查 linq 
             var set = from n in test.Entities
-                      join m in test1.Entities on n.Id equals m.Id
-                      select m;
+                      join m in test1.Entities on n.ProjectHcpId equals m.ProjectHcpId
+                      select new { m ,n};
             var dd = set.ToList();
         }
     }
